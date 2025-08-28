@@ -1,0 +1,29 @@
+################################# USing Sql Schema file ########################
+
+Schema file has created under SQL_schema_file folder .
+
+Steps:
+
+1) Create employee ( name ) database
+2) Copy the schem.sql file into Sql Managemt Studio
+3) Change the databse name 
+4) run the file . It will creaete required tables
+
+
+#######################################  Using Entity Framework ###############################
+THis project uses Entity framework 
+
+Use below commands to connect to datbase
+
+Use migrations to create the database
+A database needs to be created for the following:
+
+ApplicationDbContext
+In Visual Studio, use the Package Manager Console to scaffold a new migration and apply it to the database:
+
+PM> Add-Migration [migration name]
+PM> Update-Database
+Alternatively, you can scaffold a new migration and apply it from a command prompt at your project directory:
+
+> dotnet ef migrations add [migration name]
+> dotnet ef database update
