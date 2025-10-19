@@ -1,0 +1,86 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+trigger: none
+
+
+pool: 'Az-Windows_pool'
+  
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+
+stages:
+  - stage: 
+    displayName: " Build Stage "
+    jobs:
+      - job: 
+        displayName: " Build job "
+        steps:
+
+          - checkout: self
+
+          - task: CmdLine@2
+            inputs:
+              script: |
+                echo Write your commands here
+                
+                echo Hello world
+                
+                dir
+          - task: CmdLine@2
+            displayName: " restore"
+            inputs:
+              script: |
+                echo " Started restore"
+                
+                dotnet restore  **/*.csproj
+          - task: CmdLine@2
+            displayName: " build "
+            inputs:
+              script: |
+                echo Write your commands here
+                
+                dotnet build  **/*.csproj
+
+          - task: CmdLine@2
+            displayName: " build "
+            inputs:
+              script: |
+                echo Write your commands here
+                
+                dotnet publish  **/*.csproj -c Release -o publish
+          - task: CopyFiles@2
+            inputs:
+             SourceFolder: '$(Build.SourcesDirectory)/publish'
+             Contents: '**'
+             TargetFolder: '$(Build.StagingDirectory)/publish'
+          
+          - task: ArchiveFiles@2
+            inputs:
+              rootFolderOrFile: '$(Build.StagingDirectory)/publish'
+              includeRootFolder: false
+              archiveType: 'zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+              replaceExistingArchive: true
+          
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+              ArtifactName: 'drop'
+              publishLocation: 'Container'
+
+
+          
+          
+
+
+          
+          
+         
+
