@@ -39,14 +39,14 @@ stages:
               script: |
                 echo " Started restore"
                 
-                dotnet restore  *.csproj
+                dotnet restore 
           - task: CmdLine@2
             displayName: " build "
             inputs:
               script: |
                 echo Write your commands here
                 
-                dotnet build  *.csproj
+                dotnet build  
 
           - task: CmdLine@2
             displayName: " build "
@@ -54,7 +54,7 @@ stages:
               script: |
                 echo Write your commands here
                 
-                dotnet publish  *.csproj -c Release -o publish
+                dotnet publish  -c Release -o publish
           - task: CopyFiles@2
             inputs:
              SourceFolder: '$(Build.SourcesDirectory)/publish'
