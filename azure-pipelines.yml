@@ -16,8 +16,8 @@ variables:
 
 
 stages:
-  - stage: 
-    displayName: " Build Stage "
+  - stage: "Build_Stage"
+    displayName: "Build_Stage"
     jobs:
       - job: 
         displayName: " Build job "
@@ -74,6 +74,31 @@ stages:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
               ArtifactName: 'drop'
               publishLocation: 'Container'
+
+  - stage: 
+    displayName: " Dev_deployments"
+    dependsOn: "Build_Stage"
+    jobs:
+      - deployment: 
+        environment: "dev_employee"
+        strategy:
+         runOnce:
+           deploy:
+             steps:
+               - task: DownloadBuildArtifacts@1
+                 inputs:
+                   buildType: 'current'
+                   downloadType: 'single'
+                   artifactName: 'drop'
+                   downloadPath: '$(System.ArtifactsDirectory)'
+               - task: AzureRmWebAppDeployment@5
+                 inputs:
+                   ConnectionType: 'AzureRM'
+                   azureSubscription: 'employee-manangement'
+                   appType: 'webApp'
+                   WebAppName: 'expeness-tracker-webapp'
+                   packageForLinux: '$(System.ArtifactsDirectory)/**/*.zip'
+
 
 
           
