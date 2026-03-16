@@ -1,6 +1,8 @@
 using EmployeesManagementSystem.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace EmployeesManagementSystem
 {
@@ -19,6 +21,11 @@ namespace EmployeesManagementSystem
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
+
+             // Health Checks
+            builder.Services.AddHealthChecks()
+                .AddDbContextCheck<ApplicationDbContext>(tags: new[] { "ready" });
+
 
             var app = builder.Build();
 
@@ -45,6 +52,17 @@ namespace EmployeesManagementSystem
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
+            
+            // Health Endpoints
+            app.MapHealthChecks("/healthz", new HealthCheckOptions
+            {
+                Predicate = _ => false
+            });
+
+            app.MapHealthChecks("/ready", new HealthCheckOptions
+            {
+                Predicate = check => check.Tags.Contains("ready")
+            });
 
             app.Run();
         }
