@@ -21,6 +21,9 @@ jobs:
       - name: script
         shell: pwsh
         run: |
+            echo " present workd directory"
+            get-location
+            dir
             echo "----- dotnet version----"
             dotnet --info
       
