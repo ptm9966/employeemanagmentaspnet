@@ -22,7 +22,7 @@ jobs:
         shell: pwsh
         run: |
             echo "----- dotnet version----"
-            dotnet info
+            dotnet --info
       
         
     
