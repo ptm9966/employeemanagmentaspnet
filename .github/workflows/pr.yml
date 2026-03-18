@@ -21,11 +21,15 @@ jobs:
       - name: script
         shell: pwsh
         run: |
-            echo " present workd directory"
-            get-location
-            dir
             echo "----- dotnet version----"
             dotnet --info
-      
+      - name: restore_pacakge
+        shell: pwsh
+        run: |
+              pwd
+              ls -lah
+              write-host "restore packages"
+              dotnet restore
+              
         
     
